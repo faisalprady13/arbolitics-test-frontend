@@ -3,6 +3,7 @@
 import { useAuth } from './context/AuthContext';
 import { useRouter } from 'next/navigation';
 import { useEffect } from 'react';
+import DataViewer from '@/components/dataViewer';
 
 export default function Home() {
   const { user } = useAuth();
@@ -10,7 +11,7 @@ export default function Home() {
 
   useEffect(() => {
     if (!user) {
-      router.push('/login'); // Redirect to login if not authenticated
+      router.push('/login');
     }
   }, [user, router]);
 
@@ -19,8 +20,8 @@ export default function Home() {
   }
 
   return (
-    <div className="flex items-center justify-center min-h-screen p-8 pb-20 gap-16 sm:p-20 font-[family-name:var(--font-geist-sans)]">
-      asdad
+    <div className="flex items-center justify-center min-h-screen p-12 font-[family-name:var(--font-geist-sans)] bg-neutral-900">
+      <DataViewer />
     </div>
   );
 }

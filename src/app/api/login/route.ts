@@ -24,8 +24,8 @@ export async function POST(req: Request) {
     });
   }
 
-  const nextCookie = await cookies();
-  nextCookie.set({
+  const cookieStore = await cookies();
+  cookieStore.set({
     name: 'accessToken',
     value: data.accessToken,
     httpOnly: true,
