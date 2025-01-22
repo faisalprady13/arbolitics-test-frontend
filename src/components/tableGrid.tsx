@@ -35,7 +35,7 @@ const TableGrid = ({ data }: { data: AreaData[] }) => {
   return (
     <div className="m-auto w-full h-[500px] p-4">
       <AgGridReact
-        defaultColDef={{ resizable: true }}
+        defaultColDef={{ resizable: true, cellDataType: false }}
         rowData={data}
         columnDefs={colDefs}
         pagination={true}
@@ -45,7 +45,7 @@ const TableGrid = ({ data }: { data: AreaData[] }) => {
           mode: 'singleRow',
         }}
         autoSizeStrategy={{ type: 'fitCellContents' }}
-        onGridReady={(event) => event.api.autoSizeColumns(colDefs, true)}
+        onFirstDataRendered={(event) => event.api.autoSizeAllColumns()}
       />
     </div>
   );
