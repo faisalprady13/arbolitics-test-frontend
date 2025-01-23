@@ -27,7 +27,7 @@ const DataViewer = () => {
         },
         body: JSON.stringify({
           location_id: 10,
-          limit: 2000,
+          limit: 504,
           newEndpoint: true,
         }),
       });

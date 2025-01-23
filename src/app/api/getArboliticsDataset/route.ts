@@ -12,9 +12,7 @@ export async function POST(req: Request) {
 
   const urlGet = `${process.env.ARBOLITICS_API}/data/getArboliticsDataset`;
   const urlPost = `${process.env.ARBOLITICS_API}/data/getArboliticsDatasetPost`;
-  const body = await req.json();
-  const newEndpoint = body.newEndpoint;
-  delete body.newEndpoint;
+  const { newEndpoint, ...body } = await req.json();
 
   if (newEndpoint) {
     // Solution 1 for POST endpoint

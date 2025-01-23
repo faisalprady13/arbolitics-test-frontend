@@ -1,51 +1,6 @@
 import { AreaDataWithDate, AreaDataWithTimestamp } from '@/types/areaDataTypes';
 import { Interval } from '@/types/intervalTypes';
 
-const getSimplifiedTimestamp = (date: Date, interval: Interval): string => {
-  switch (interval) {
-    case Interval.Daily:
-      return date.toISOString().split('T')[0];
-    case Interval.Weekly:
-      return date.toISOString().slice(0, 7);
-    case Interval.Monthly:
-      return date.toISOString().slice(0, 7);
-    default:
-      return date.toISOString().split('T')[0];
-  }
-};
-
-const formatTimestamp = (date: Date, interval: Interval) => {
-  switch (interval) {
-    case Interval.Hourly: {
-      return date.toLocaleString('en-GB');
-    }
-    case Interval.Daily: {
-      const timestamp = new Date(date.getTime() - 1000);
-      return timestamp.toLocaleDateString('en-GB', {
-        year: 'numeric',
-        month: '2-digit',
-        day: '2-digit',
-      });
-    }
-    case Interval.Weekly: {
-      const timestamp = new Date(date.getTime() - 1000);
-      return timestamp.toLocaleDateString('en-GB', {
-        year: 'numeric',
-        month: '2-digit',
-      });
-    }
-    case Interval.Monthly: {
-      const timestamp = new Date(date.getTime() - 1000);
-      return timestamp.toLocaleDateString('en-GB', {
-        year: 'numeric',
-        month: '2-digit',
-      });
-    }
-    default:
-      return date.toLocaleString('en-GB');
-  }
-};
-
 export const formatData = (
   data: AreaDataWithDate[],
   interval: Interval
@@ -70,10 +25,13 @@ const simplifyData = (data: AreaDataWithDate[], interval: Interval) => {
         result: { [key: string]: AreaDataWithDate & { count: number } },
         currentData: AreaDataWithDate
       ) => {
-        const date = getSimplifiedTimestamp(currentData?.date, interval);
+        const timestampKey = getSimplifiedTimestamp(
+          currentData?.date,
+          interval
+        );
 
-        if (!result[date]) {
-          result[date] = {
+        if (!result[timestampKey]) {
+          result[timestampKey] = {
             ...currentData,
             FMW: 0,
             TMS: 0,
@@ -89,17 +47,17 @@ const simplifyData = (data: AreaDataWithDate[], interval: Interval) => {
           };
         }
 
-        result[date].count += 1;
-        result[date].FMW += currentData.FMW;
-        result[date].TMS += currentData.TMS;
-        result[date].bvol += currentData.bvol;
-        result[date].tem1 += currentData.tem1;
-        result[date].hum1 += currentData.hum1;
-        result[date].solr += currentData.solr;
-        result[date].prec += currentData.prec;
-        result[date].wind += currentData.wind;
-        result[date].wins += currentData.wins;
-        result[date].lwet += currentData.lwet;
+        result[timestampKey].count += 1;
+        result[timestampKey].FMW += currentData.FMW;
+        result[timestampKey].TMS += currentData.TMS;
+        result[timestampKey].bvol += currentData.bvol;
+        result[timestampKey].tem1 += currentData.tem1;
+        result[timestampKey].hum1 += currentData.hum1;
+        result[timestampKey].solr += currentData.solr;
+        result[timestampKey].prec += currentData.prec;
+        result[timestampKey].wind += currentData.wind;
+        result[timestampKey].wins += currentData.wins;
+        result[timestampKey].lwet += currentData.lwet;
 
         return result;
       },
@@ -127,4 +85,57 @@ function roundToTwoDecimals(value: number) {
   }
 
   return Math.round(value * 100) / 100;
+}
+
+const getSimplifiedTimestamp = (date: Date, interval: Interval): string => {
+  switch (interval) {
+    case Interval.Daily:
+      return date.toISOString().split('T')[0];
+    case Interval.Weekly: {
+      return getWeekKey(date);
+    }
+    case Interval.Monthly:
+      return date.toISOString().slice(0, 7);
+    default:
+      return date.toISOString().split('T')[0];
+  }
+};
+
+const formatTimestamp = (date: Date, interval: Interval) => {
+  switch (interval) {
+    case Interval.Hourly: {
+      return date.toLocaleString('en-GB');
+    }
+    case Interval.Daily: {
+      const timestamp = new Date(date.getTime() - 1000);
+      return timestamp.toLocaleDateString('en-GB', {
+        year: 'numeric',
+        month: '2-digit',
+        day: '2-digit',
+      });
+    }
+    case Interval.Weekly: {
+      const timestamp = new Date(date.getTime() - 1000);
+      return getWeekKey(timestamp);
+    }
+    case Interval.Monthly: {
+      const timestamp = new Date(date.getTime() - 1000);
+      return timestamp.toLocaleDateString('en-GB', {
+        year: 'numeric',
+        month: '2-digit',
+      });
+    }
+    default:
+      return date.toLocaleString('en-GB');
+  }
+};
+
+function getWeekKey(date: Date) {
+  const year = date.getUTCFullYear();
+  const start = new Date(Date.UTC(date.getUTCFullYear(), 0, 1));
+  const dayOfYear =
+    (date.getTime() - start.getTime()) / (24 * 60 * 60 * 1000) + 1;
+  const week = Math.ceil((dayOfYear + start.getUTCDay()) / 7);
+
+  return `${year}-W${week}`;
 }
