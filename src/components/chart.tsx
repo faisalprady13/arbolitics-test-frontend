@@ -1,25 +1,94 @@
 import React, { useEffect, useState } from 'react';
 import ReactECharts from 'echarts-for-react';
 import { AreaDataWithTimestamp } from '@/types/areaDataTypes';
+import { Button } from './ui/button';
+
+enum Property {
+  Temperature = 'tem1',
+  Humidity = 'hum1',
+  FMW = 'FMW',
+  TMS = 'TMS',
+  Bvol = 'bvol',
+  Solr = 'solr',
+  Wind = 'wind',
+  Wins = 'wins',
+  Lwet = 'lwet',
+}
 
 const Chart = ({ data }: { data: AreaDataWithTimestamp[] }) => {
-  const [yAxisData, setYAxisData] = useState<number[]>([]);
+  const [activeProperty, setActiveProperty] = useState<Property>(
+    Property.Temperature
+  );
+  const [xAxisData, setXAxisData] = useState<string[]>([]);
+  const [chartData, setChartData] = useState<number[]>([]);
 
   useEffect(() => {
     if (data && data.length > 0) {
+      setXAxisData(
+        data
+          .map((item) => {
+            return item.timestamp;
+          })
+          .reverse()
+      );
+      setChartData(
+        data
+          .map((item) => {
+            return item[activeProperty];
+          })
+          .reverse()
+      );
     }
-  }, [data]);
+  }, [data, activeProperty]);
+
+  const options = {
+    title: {
+      text: `Chart for ${activeProperty}`,
+    },
+    xAxis: {
+      data: xAxisData,
+    },
+    yAxis: {},
+    legend: {
+      data: [activeProperty],
+    },
+    toolbox: {
+      feature: {
+        dataZoom: {},
+        restore: {},
+      },
+    },
+    tooltip: {},
+    series: [
+      {
+        name: activeProperty,
+        type: 'line',
+        data: chartData,
+      },
+    ],
+  };
+
   return (
-    <div>
-      {/* <ReactECharts
-        option={this.getOption()}
+    <div className="w-full flex flex-wrap">
+      <div className="flex flex-wrap gap-4 mb-12">
+        <span>Choose Property</span>
+        {Object.values(Property).map((item) => (
+          <Button
+            variant={activeProperty === item ? 'default' : 'outline'}
+            key={item}
+            value={item}
+            onClick={() => setActiveProperty(item)}
+          >
+            {item}
+          </Button>
+        ))}
+      </div>
+      <ReactECharts
+        option={options}
         notMerge={true}
         lazyUpdate={true}
-        theme={'theme_name'}
-        onChartReady={this.onChartReadyCallback}
-        onEvents={EventsDict}
-        opts={}
-      /> */}
+        className="w-full h-[400px]"
+      />
     </div>
   );
 };

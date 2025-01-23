@@ -27,7 +27,7 @@ const DataViewer = () => {
         },
         body: JSON.stringify({
           location_id: 10,
-          limit: 504,
+          limit: 10000,
           newEndpoint: true,
         }),
       });
@@ -51,13 +51,13 @@ const DataViewer = () => {
   }, [data, dataInterval, device]);
 
   return (
-    <Card className="w-full max-w-screen-lg m-auto">
+    <Card className="w-full max-w-screen-lg m-auto px-2 py-4">
       <CardHeader>
         <p className="font-semibold text-xl">Data Viewer</p>
       </CardHeader>
 
       <CardContent>
-        <div className="flex gap-4 mb-4">
+        <div className="flex flex-wrap gap-4 mb-4">
           <span>Choose Device</span>
           {Object.values(Device).map((item) => (
             <Button
@@ -70,7 +70,7 @@ const DataViewer = () => {
             </Button>
           ))}
         </div>
-        <div className="flex gap-4 mb-4">
+        <div className="flex flex-wrap gap-4 mb-4">
           <span>Choose Interval</span>
           {Object.values(Interval).map((item) => (
             <Button
@@ -85,12 +85,10 @@ const DataViewer = () => {
         </div>
         <div className="w-full flex flex-wrap">
           <div className="w-full">
-            <p> Table </p>
-            <TableGrid data={filteredData} />
-          </div>
-          <div>
-            <p>chart</p>
             <Chart data={filteredData} />
+          </div>
+          <div className="w-full">
+            <TableGrid data={filteredData} />
           </div>
         </div>
       </CardContent>
