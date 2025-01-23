@@ -12,7 +12,15 @@ export interface AreaData {
   lwet: number;
 }
 
+export interface AreaDataWithDate extends AreaData {
+  date: Date;
+}
+
+export interface AreaDataWithTimestamp extends AreaData {
+  timestamp: string;
+}
+
 export enum Device {
-  type1 = '25_225',
-  type2 = '25_226',
+  Type1 = '25_225',
+  Type2 = '25_226',
 }

@@ -1,8 +1,8 @@
 import React, { useEffect, useState } from 'react';
 import ReactECharts from 'echarts-for-react';
-import { AreaData } from '@/types/areaDataTypes';
+import { AreaDataWithTimestamp } from '@/types/areaDataTypes';
 
-const Chart = ({ data }: { data: AreaData[] }) => {
+const Chart = ({ data }: { data: AreaDataWithTimestamp[] }) => {
   const [yAxisData, setYAxisData] = useState<number[]>([]);
 
   useEffect(() => {

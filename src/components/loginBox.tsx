@@ -30,7 +30,6 @@ export default function LoginBox() {
       body: JSON.stringify({ email, password }),
     });
     const data = await res.json();
-    console.log(data);
 
     if (data.name) {
       login(data.name);

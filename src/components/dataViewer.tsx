@@ -1,18 +1,25 @@
-import { AreaData, Device } from '@/types/areaDataTypes';
+import {
+  AreaDataWithDate,
+  AreaDataWithTimestamp,
+  Device,
+} from '@/types/areaDataTypes';
 import React, { useEffect, useState } from 'react';
 import TableGrid from './tableGrid';
 import { Button } from './ui/button';
 import { Card, CardContent, CardHeader } from './ui/card';
 import Chart from './chart';
+import { addTimestamp } from '@/utils/addTimestamp';
+import { Interval } from '@/types/intervalTypes';
+import { formatData } from '@/utils/formatData';
 
 const DataViewer = () => {
-  const [data, setData] = useState<AreaData[]>([]);
-  const [selectedData, setSelectedData] = useState<AreaData[]>([]);
-  const [device, setDevice] = useState<Device | null>(Device.type1);
+  const [data, setData] = useState<AreaDataWithDate[]>([]);
+  const [filteredData, setFilteredData] = useState<AreaDataWithTimestamp[]>([]);
+  const [device, setDevice] = useState<Device>(Device.Type1);
+  const [dataInterval, setDataInterval] = useState<Interval>(Interval.Hourly);
 
   useEffect(() => {
     const fetchData = async () => {
-      console.log('fetch here');
       const res = await fetch('/api/getArboliticsDataset', {
         method: 'POST',
         headers: {
@@ -20,14 +27,15 @@ const DataViewer = () => {
         },
         body: JSON.stringify({
           location_id: 10,
-          limit: 1000,
+          limit: 2000,
           newEndpoint: true,
         }),
       });
       const data = await res?.json();
 
       if (data) {
-        setData(data);
+        const dataWithDate = addTimestamp(data);
+        setData(dataWithDate);
       }
     };
 
@@ -35,8 +43,12 @@ const DataViewer = () => {
   }, []);
 
   useEffect(() => {
-    setSelectedData(data.filter((item) => item.DID === device));
-  }, [data, device]);
+    const filteredByDevice = data.filter((item) => item.DID === device);
+
+    const simplifiedData = formatData(filteredByDevice, dataInterval);
+
+    setFilteredData(simplifiedData);
+  }, [data, dataInterval, device]);
 
   return (
     <Card className="w-full max-w-screen-lg m-auto">
@@ -58,14 +70,27 @@ const DataViewer = () => {
             </Button>
           ))}
         </div>
+        <div className="flex gap-4 mb-4">
+          <span>Choose Interval</span>
+          {Object.values(Interval).map((item) => (
+            <Button
+              variant={dataInterval === item ? 'default' : 'outline'}
+              key={item}
+              value={item}
+              onClick={() => setDataInterval(item)}
+            >
+              {item}
+            </Button>
+          ))}
+        </div>
         <div className="w-full flex flex-wrap">
           <div className="w-full">
             <p> Table </p>
-            <TableGrid data={selectedData} />
+            <TableGrid data={filteredData} />
           </div>
           <div>
             <p>chart</p>
-            <Chart data={selectedData} />
+            <Chart data={filteredData} />
           </div>
         </div>
       </CardContent>

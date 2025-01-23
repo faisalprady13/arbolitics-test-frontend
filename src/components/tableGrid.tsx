@@ -9,7 +9,7 @@ import {
   ColumnAutoSizeModule,
   PaginationModule,
 } from 'ag-grid-community';
-import { AreaData } from '@/types/areaDataTypes';
+import { AreaDataWithTimestamp } from '@/types/areaDataTypes';
 
 ModuleRegistry.registerModules([
   PaginationModule,
@@ -17,7 +17,7 @@ ModuleRegistry.registerModules([
   ColumnAutoSizeModule,
 ]);
 
-const TableGrid = ({ data }: { data: AreaData[] }) => {
+const TableGrid = ({ data }: { data: AreaDataWithTimestamp[] }) => {
   const [colDefs, setColDefs] = useState<ColDef[]>([]);
 
   useEffect(() => {
