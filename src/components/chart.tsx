@@ -69,9 +69,9 @@ const Chart = ({ data }: { data: AreaDataWithTimestamp[] }) => {
   };
 
   return (
-    <div className="w-full flex flex-wrap">
+    <div className="w-full flex flex-wrap flex-col">
+      <p className="mb-2">Choose Property</p>
       <div className="flex flex-wrap gap-4 mb-12">
-        <span>Choose Property</span>
         {Object.values(Property).map((item) => (
           <Button
             variant={activeProperty === item ? 'default' : 'outline'}

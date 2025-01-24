@@ -33,7 +33,7 @@ const TableGrid = ({ data }: { data: AreaDataWithTimestamp[] }) => {
   }, [data]);
 
   return (
-    <div className="m-auto w-full h-[500px] px-4">
+    <div className="m-auto w-full h-[500px] md:px-4">
       <AgGridReact
         defaultColDef={{ resizable: true, cellDataType: false }}
         rowData={data}

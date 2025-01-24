@@ -57,8 +57,8 @@ const DataViewer = () => {
       </CardHeader>
 
       <CardContent>
+        <p className="mb-2">Choose Device</p>
         <div className="flex flex-wrap gap-4 mb-4">
-          <span>Choose Device</span>
           {Object.values(Device).map((item) => (
             <Button
               variant={device === item ? 'default' : 'outline'}
@@ -70,8 +70,8 @@ const DataViewer = () => {
             </Button>
           ))}
         </div>
+        <p className="mb-2">Choose Interval</p>
         <div className="flex flex-wrap gap-4 mb-4">
-          <span>Choose Interval</span>
           {Object.values(Interval).map((item) => (
             <Button
               variant={dataInterval === item ? 'default' : 'outline'}
