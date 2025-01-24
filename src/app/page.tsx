@@ -20,7 +20,7 @@ export default function Home() {
   }
 
   return (
-    <div className="flex items-center justify-center min-h-screen p-12 font-[family-name:var(--font-geist-sans)] bg-neutral-900">
+    <div className="flex items-center justify-center min-h-screen p-2 md:p-12 font-[family-name:var(--font-geist-sans)] bg-neutral-900">
       <DataViewer />
     </div>
   );

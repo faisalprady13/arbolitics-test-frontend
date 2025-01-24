@@ -51,7 +51,7 @@ const DataViewer = () => {
   }, [data, dataInterval, device]);
 
   return (
-    <Card className="w-full max-w-screen-lg m-auto px-2 py-4">
+    <Card className="w-full max-w-screen-lg m-auto md:px-2 md:py-4">
       <CardHeader>
         <p className="font-semibold text-xl">Data Viewer</p>
       </CardHeader>
